@@ -8,9 +8,71 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var dishes: [Dish] = []
+    @State var dishName: String = ""
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        NavigationView {
+            VStack {
+                HStack {
+                    TextField("Enter Dish Name", text: $dishName)
+                    Button("Add") {
+                        let dish = Dish(name: dishName)
+                        if dishes.isEmpty {
+                            dishes.insert(dish, at: 0)
+                        }
+                        else {
+                            dishes.append(dish)
+                        }
+                        saveDishes()
+                        dishName = ""
+                    }
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                  
+                   
+                }
+                .padding()
+                List {
+                    ForEach(dishes) {
+                        Text($0.name)
+                    }
+                    .onDelete(perform: { dish in
+                        dishes.remove(atOffsets: dish)
+                        saveDishes()
+                        
+                    })
+                }
+                
+            }
+            .onAppear(perform: loadDishes)
+            .navigationTitle("Dishes App")
+        }
+        
+    }
+    func loadDishes() {
+        if let data = UserDefaults.standard.data(forKey: "dishes") {
+            let decoder = JSONDecoder()
+            do {
+                dishes = try decoder.decode([Dish].self, from: data)
+            }
+            catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    func saveDishes() {
+       
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(dishes)
+            UserDefaults.standard.set(data, forKey: "dishes")
+        }
+        catch {
+            print(error.localizedDescription)
+        }
     }
 }
 
