@@ -15,6 +15,7 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 HStack {
+                    Spacer()
                     TextField("Enter Dish Name", text: $dishName)
                     Button("Add") {
                         let dish = Dish(name: dishName)
@@ -28,13 +29,22 @@ struct ContentView: View {
                         dishName = ""
                     }
                     .padding()
+                   
                     .background(Color.blue)
                     .foregroundColor(.white)
-                    .cornerRadius(10)
-                  
+                    .cornerRadius(20)
+                  Spacer()
                    
                 }
                 .padding()
+                Text("List of Dishes")
+                    .fontWeight(.bold)
+                    .font(.title)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+                    .background(Color.pink)
+                    .foregroundColor(.white)
+                    .cornerRadius(5)
                 List {
                     ForEach(dishes) {
                         Text($0.name)
@@ -45,7 +55,6 @@ struct ContentView: View {
                         
                     })
                 }
-                
             }
             .onAppear(perform: loadDishes)
             .navigationTitle("Dishes App")
