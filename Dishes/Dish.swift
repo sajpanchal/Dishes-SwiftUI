@@ -8,6 +8,8 @@
 import Foundation
 
 struct Dish: Identifiable, Codable {
+    
+    
     var name: String
     var id = UUID()
 }

@@ -14,29 +14,26 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
+                Spacer()
                 HStack {
                     Spacer()
-                    TextField("Enter Dish Name", text: $dishName)
+                        TextField("Enter Dish Name", text: $dishName)
                     Button("Add") {
                         let dish = Dish(name: dishName)
-                        if dishes.isEmpty {
-                            dishes.insert(dish, at: 0)
-                        }
-                        else {
-                            dishes.append(dish)
-                        }
+                        dishes.append(dish)
                         saveDishes()
                         dishName = ""
                     }
                     .padding()
-                   
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(20)
+                    .disabled(dishName.count < 2)
+                    .opacity(dishName.count < 2 ? 0.6 : 1)
                   Spacer()
                    
                 }
-                .padding()
+                           
                 Text("List of Dishes")
                     .fontWeight(.bold)
                     .font(.title)
@@ -50,6 +47,7 @@ struct ContentView: View {
                         Text($0.name)
                     }
                     .onDelete(perform: { dish in
+                        print(dish)
                         dishes.remove(atOffsets: dish)
                         saveDishes()
                         
